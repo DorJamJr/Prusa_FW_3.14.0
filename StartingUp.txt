@@ -1,0 +1,10 @@
+
+Setting up a repo using source from Prusa
+
+- Go to github.com/DorJamJr
+- Create a new empty repo there
+- In Local github Desktop, clone the empty repo (creates a local, empty repo)
+- Download the source files for the desired FW from Prusa
+- Copy the Prusa FW files into the empty repo
+- Commit the  updated repo to local
+- Push the comitted repo to the github/DorJamJr repo
