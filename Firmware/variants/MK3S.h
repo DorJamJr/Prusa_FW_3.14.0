@@ -59,11 +59,12 @@
 #define MANUAL_Z_HOME_POS 0.2
 
 // Travel limits after homing
-#define X_MAX_POS 255
-#define X_MIN_POS 0
-#define Y_MAX_POS 212.5
+// JRA 112524
+#define X_MAX_POS 225	// was 255
+#define X_MIN_POS -10 	// was 0
+#define Y_MAX_POS 205 	// was 212.5
 #define Y_MIN_POS -4 //orig -4
-#define Z_MAX_POS 210
+#define Z_MAX_POS 195	// was 210
 #define Z_MIN_POS 0.15
 
 // Canceled home position
@@ -287,7 +288,8 @@
 #define TMC2130_STEALTH_Z
 #define TMC2130_DEDGE_STEPPING
 
-//#define TMC2130_SERVICE_CODES_M910_M918
+// JRA 112524 - uncomment
+#define TMC2130_SERVICE_CODES_M910_M918
 
 //#define TMC2130_DEBUG
 //#define TMC2130_DEBUG_WR
@@ -658,7 +660,8 @@
 
 #define M600_TIMEOUT 600  //seconds
 
-//#define SUPPORT_VERBOSITY
+// JRA 112524
+#define SUPPORT_VERBOSITY
 
 #define MMU_CONFIG_FILE "mmu2/variants/config_MMU2S.h"
 #define MMU_FILAMENT_COUNT 5
