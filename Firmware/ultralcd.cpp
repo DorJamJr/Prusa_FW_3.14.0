@@ -3527,8 +3527,14 @@ void lcd_mesh_calibration()
 
 void lcd_mesh_calibration_z()
 {
+  SERIAL_PROTOCOLPGM("   ?JRA - At lcd_mesh_calibration_z #3530- enquecommand_P - M45 Z.\n");
+ 
   enquecommand_P(PSTR("M45 Z"));
+  SERIAL_PROTOCOLPGM("   ?JRA - At lcd_mesh_calibration_z #3533- after enquecommand_P - M45 Z.\n");
+
   lcd_return_to_status();
+  SERIAL_PROTOCOLPGM("   ?JRA - At lcd_mesh_calibration_z #3536- after lcd_return_to_status.\n");
+
 }
 
 void lcd_temp_calibration_set() {
@@ -3848,10 +3854,11 @@ void lcd_wizard(WizState state)
 			state = (wizard_event ? S::Restore : S::Failed);
 			break;
 		case S::Xyz:
-			lcd_show_fullscreen_message_and_wait_P(_T(MSG_WIZARD_XYZ_CAL));
-			wizard_event = gcode_M45(false, 0);
-			state = (wizard_event ? S::Restore : S::Failed);
-			break;
+    // for Craig-MK3.5, we can't do yz calibration, so comment out next 4 lines, and we fall through to cal Z only
+	//		lcd_show_fullscreen_message_and_wait_P(_T(MSG_WIZARD_XYZ_CAL));
+	//		wizard_event = gcode_M45(false, 0);
+	//		state = (wizard_event ? S::Restore : S::Failed);
+	//		break;
 		case S::Z:
 			lcd_show_fullscreen_message_and_wait_P(_T(MSG_REMOVE_SHIPPING_HELPERS));
 			lcd_show_fullscreen_message_and_wait_P(_T(MSG_REMOVE_TEST_PRINT));
@@ -4580,7 +4587,7 @@ static void lcd_calibration_menu()
 #endif //TMC2130
     MENU_ITEM_FUNCTION_P(_T(MSG_SELFTEST), lcd_selftest_v);
     // MK2
-    MENU_ITEM_FUNCTION_P(_T(MSG_CALIBRATE_BED), lcd_mesh_calibration);
+//..JRA    MENU_ITEM_FUNCTION_P(_T(MSG_CALIBRATE_BED), lcd_mesh_calibration);
     // "Calibrate Z" with storing the reference values to EEPROM.
     MENU_ITEM_SUBMENU_P(_T(MSG_HOMEYZ), lcd_mesh_calibration_z);
 
@@ -6304,7 +6311,7 @@ static bool lcd_selfcheck_axis_sg(uint8_t axis) {
 	float margin = 60;
 	float max_error_mm = 5;
 	switch (axis) {
-	case 0: axis_length = X_MAX_POS; break;
+	case 0: axis_length = X_MAX_POS+22; break;
 	case 1: axis_length = Y_MAX_POS - Y_MIN_POS + 4; break;
 	default: axis_length = 210; break;
 	}
@@ -6377,7 +6384,10 @@ static bool lcd_selfcheck_axis_sg(uint8_t axis) {
 			if (axis == Y_AXIS) _error_1 = "Y";
 			if (axis == Z_AXIS) _error_1 = "Z";
 
-			lcd_selftest_error(TestError::Axis, _error_1, "");
+            lcd_selftest_error(TestError::Axis, _error_1, "");
+//            int da_float = 100*measured_axis_length[i];
+//            lcd_set_cursor(0,2); lcd_print(da_float);
+//            _delay(5000);
 			current_position[axis] = 0;
 			plan_set_position_curposXYZE();
 			reset_crash_det(axis);

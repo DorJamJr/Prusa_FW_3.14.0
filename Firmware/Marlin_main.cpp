@@ -3234,12 +3234,14 @@ bool gcode_M45(bool onlyZ, int8_t verbosity_level)
 		}
 
 		refresh_cmd_timeout();
+    SERIAL_PROTOCOLPGM("?JRA - At gcode_M45 (#3237)- STEEL_SHEET.\n");
 		#ifndef STEEL_SHEET
 		if (((degHotend(0) > MAX_HOTEND_TEMP_CALIBRATION) || (degBed() > MAX_BED_TEMP_CALIBRATION)) && (!onlyZ))
 		{
 			lcd_wait_for_cool_down();
 		}
 		#endif //STEEL_SHEET
+    SERIAL_PROTOCOLPGM("?JRA - At gcode_M45 (#3244).\n");
 		if(!onlyZ)
 		{
 			KEEPALIVE_STATE(PAUSED_FOR_USER);
@@ -3254,12 +3256,14 @@ bool gcode_M45(bool onlyZ, int8_t verbosity_level)
 			lcd_display_message_fullscreen_P(_T(MSG_FIND_BED_OFFSET_AND_SKEW_LINE1));
 			lcd_puts_at_P(0,3,_n("1/4"));
 		}
+    SERIAL_PROTOCOLPGM("?JRA - At gcode_M45 (#3260).\n");
 			
 		bool endstops_enabled  = enable_endstops(false);
     raise_z(-1);
 
 		// Move the print head close to the bed.
 		current_position[Z_AXIS] = MESH_HOME_Z_SEARCH;
+    SERIAL_PROTOCOLPGM("?JRA - At gcode_M45 (#3266).\n");
 
 		enable_endstops(true);
 #ifdef TMC2130
@@ -3269,16 +3273,19 @@ bool gcode_M45(bool onlyZ, int8_t verbosity_level)
 		plan_buffer_line_curposXYZE(homing_feedrate[Z_AXIS] / 40);
 
 		st_synchronize();
+
 #ifdef TMC2130
 		tmc2130_home_exit();
 #endif //TMC2130
-		enable_endstops(endstops_enabled);
 
+		enable_endstops(endstops_enabled);
+  
 		if ((st_get_position_mm(Z_AXIS) <= (MESH_HOME_Z_SEARCH + HOME_Z_SEARCH_THRESHOLD)) &&
 		    (st_get_position_mm(Z_AXIS) >= (MESH_HOME_Z_SEARCH - HOME_Z_SEARCH_THRESHOLD)))
 		{
 			if (onlyZ)
 			{
+  
 				clean_up_after_endstop_move(l_feedmultiply);
 				// Z only calibration.
 				// Load the machine correction matrix
@@ -3292,6 +3299,7 @@ bool gcode_M45(bool onlyZ, int8_t verbosity_level)
 					calibration_status_set(CALIBRATION_STATUS_Z);
 					final_result = true;
 				}
+        SERIAL_PROTOCOLPGM("?JRA - At gcode_M45 (#3302)- exit onlyZ.\n");  
 			}
 			else
 			{
@@ -3355,12 +3363,17 @@ bool gcode_M45(bool onlyZ, int8_t verbosity_level)
 	{
 		// Timeouted.
 	}
+   SERIAL_PROTOCOLPGM("?JRA - At lcd_update_enable (#3366)- exit onlyZ.\n");  
+
 	lcd_update_enable(true);
 #ifdef TMC2130
+   SERIAL_PROTOCOLPGM("?JRA - At FORCE_HIGH_POWER_END (#3370)- exit onlyZ.\n");  
 	FORCE_HIGH_POWER_END;
 #endif // TMC2130
+   SERIAL_PROTOCOLPGM("?JRA - At FORCE_BL_ON_END (#3373)- exit onlyZ.\n");  
     
     FORCE_BL_ON_END;
+   SERIAL_PROTOCOLPGM("?JRA - At return final_result (#3376)- exit onlyZ.\n");  
     
 	return final_result;
 }
